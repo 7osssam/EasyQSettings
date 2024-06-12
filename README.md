@@ -1,4 +1,3 @@
-```markdown
 # EasyQSettings
 
 EasyQSettings is a library that provides an easy-to-use wrapper around QSettings, allowing users to quickly implement settings storage and retrieval in their Qt applications.
