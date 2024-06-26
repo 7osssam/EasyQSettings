@@ -108,6 +108,8 @@ int main(int argc, char *argv[])
 In your CMakeLists.txt file, add the following configuration:
 
 ```cmake
+#========================= EasyQSettings =========================
+
 # Add the include directory for the EasyQSettings library
 add_subdirectory(EasyQSettings/include)
 
@@ -115,7 +117,9 @@ add_subdirectory(EasyQSettings/include)
 include_directories(EasyQSettings/include)
 
 # Link the EasyQSettings library
-target_link_libraries(${PROJECT_NAME} EasyQSettings)
+target_link_libraries(${PROJECT_NAME} PRIVATE EasyQSettings_lib)
+
+#==================================================================
 
 ```
 
