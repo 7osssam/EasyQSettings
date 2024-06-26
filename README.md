@@ -4,12 +4,12 @@ EasyQSettings is a library that provides an easy-to-use wrapper around QSettings
 
 ## Overview
 
-The library is designed to simplify the process of managing application settings using QSettings. It offers thread-safe methods for saving and loading settings, along with a singleton pattern to ensure a single instance of the settings manager.
+The library simplifies the process of managing application settings using QSettings. It offers thread-safe methods for saving and loading settings, along with a singleton pattern to ensure a single instance of the settings manager.
 
 ## Features
 
 - Thread-safe access to settings
-- Singleton pattern to ensure a single instance
+- Singleton pattern for a single instance
 - Simple API for saving and loading settings
 - Customizable implementation through inheritance
 
@@ -18,18 +18,17 @@ The library is designed to simplify the process of managing application settings
 ```
 .
 ├───demo
-│       CMakeLists.txt
-│       CustomSettings.cpp
-│       CustomSettings.h
-│       main.cpp
-│
+│   ├───CMakeLists.txt
+│   ├───CustomSettings.cpp
+│   ├───CustomSettings.h
+│   └───main.cpp
 └───include
-        EasyQSettings.h
-        CMakeLists.txt
+    ├───EasyQSettings.h
+    └───CMakeLists.txt
 CMakeLists.txt
 ```
 
-## demo instructions
+## Demo Instructions
 
 1. Clone the repository:
     ```sh
@@ -53,10 +52,10 @@ Create a custom settings class that inherits from `SettingsBase` and implements 
 ```cpp
 #include "CustomSettings.h"
 
-CustomSettings::CustomSettings(const QString& filePath)
-    : filePath_(filePath), customSettings_(Settings::getInstance(filePath))
+CustomSettings::CustomSettings()
+    : customSettings_(EasyQSettings::getInstance(myfilePath_)), filePath_(myfilePath_)
 {
-    qInfo() << "CustomSettings initialized with file:" << filePath;
+    qInfo() << "CustomSettings initialized with file:" << myfilePath_;
 }
 
 void CustomSettings::SaveSettings()
@@ -72,9 +71,9 @@ void CustomSettings::SaveSettings()
 void CustomSettings::LoadSettings()
 {
     QString Color1 = customSettings_.LoadVal("Group1", "Font_Color", "White").toString();
-    qint32  size1 = customSettings_.LoadVal("Group1", "Font_Size", 10).toInt();
+    qint32 size1 = customSettings_.LoadVal("Group1", "Font_Size", 10).toInt();
     QString Color2 = customSettings_.LoadVal("Group2", "Font_Color", "White").toString();
-    qint32  size2 = customSettings_.LoadVal("Group2", "Font_Size", 10).toInt();
+    qint32 size2 = customSettings_.LoadVal("Group2", "Font_Size", 10).toInt();
 
     qInfo() << Q_FUNC_INFO;
 }
@@ -90,8 +89,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QString settingsFilePath = "settings.ini";
-    CustomSettings settingsManager(settingsFilePath);
+    CustomSettings &settingsManager = CustomSettings::getInstance();
 
     // Save settings
     settingsManager.SaveSettings();
@@ -120,9 +118,7 @@ include_directories(EasyQSettings/include)
 target_link_libraries(${PROJECT_NAME} PRIVATE EasyQSettings_lib)
 
 #==================================================================
-
 ```
-
 
 ## API Reference
 
@@ -136,6 +132,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE EasyQSettings_lib)
 - `void DisplaySettings()`: Displays all the settings stored in the file. (For debugging purposes)
 
 ### `SettingsBase` Class (Abstract)
+
 SettingsBase is an abstract class that provides a base implementation for managing settings. Users can create custom settings classes by inheriting from SettingsBase and implementing the SaveSettings and LoadSettings methods.
 
 #### Methods
