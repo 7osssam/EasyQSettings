@@ -1,4 +1,4 @@
-
+// EasyQSettings.h
 
 #ifndef EASYQSETTINGS_H
 #define EASYQSETTINGS_H
@@ -21,25 +21,26 @@ class EasyQSettings
 {
 private:
 	QSettings settings_;
-	QMutex	  mutex_;
+	QMutex mutex_;
 
 protected:
-	EasyQSettings(const QString& filePath) : settings_(filePath, QSettings::IniFormat)
+	EasyQSettings(const QString &filePath) : settings_(filePath, QSettings::IniFormat)
 	{
 		qInfo() << "EasyQSettings initialized with file:" << filePath;
 	}
 
 	// delete copy constructor and assignment operator
-	EasyQSettings(const EasyQSettings&) = delete;
-	EasyQSettings& operator=(const EasyQSettings&) = delete;
+	EasyQSettings(const EasyQSettings &) = delete;
+	EasyQSettings &operator=(const EasyQSettings &) = delete;
 
 public:
-	static EasyQSettings& getInstance(const QString& filePath)
+	static EasyQSettings &getInstance(const QString &filePath)
 	{
+		qInfo() << "getInstance with file:" << filePath;
 		static EasyQSettings instance(filePath);
 		return instance;
 	}
-	bool SaveVal(const QString& group, const QString& key, const QVariant& value)
+	bool SaveVal(const QString &group, const QString &key, const QVariant &value)
 	{
 		QMutexLocker locker(&mutex_); // Lock the mutex_
 
@@ -63,7 +64,7 @@ public:
 		return status;
 	}
 
-	QVariant LoadVal(const QString& group, const QString& key, const QVariant& defaultValue = QVariant{})
+	QVariant LoadVal(const QString &group, const QString &key, const QVariant &defaultValue = QVariant{})
 	{
 		QMutexLocker locker(&mutex_); // Lock the mutex_
 
@@ -93,11 +94,11 @@ public:
 	// for debugging purposes
 	void DisplaySettings()
 	{
-		foreach (const QString& group, settings_.childGroups())
+		foreach (const QString &group, settings_.childGroups())
 		{
 			qInfo() << "Group:" << group;
 			settings_.beginGroup(group);
-			foreach (const QString& key, settings_.childKeys())
+			foreach (const QString &key, settings_.childKeys())
 			{
 				qInfo() << "__ Key:" << key;
 				qInfo() << "_____ Value:" << settings_.value(key).toString();
@@ -106,7 +107,5 @@ public:
 		}
 	}
 };
-
-
 
 #endif // EASYQSETTINGS_H
