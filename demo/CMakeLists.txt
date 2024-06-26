@@ -23,7 +23,7 @@ add_executable(${PROJECT_NAME}
 )
 
 # Link the EasyQSettings library
-target_link_libraries(${PROJECT_NAME} EasyQSettings)
+target_link_libraries(${PROJECT_NAME} EasyQSettings_lib)
 
 # Link Qt libraries
 target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core)
