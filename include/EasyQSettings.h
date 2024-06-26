@@ -63,7 +63,7 @@ public:
 		return status;
 	}
 
-	QVariant LoadVal(const QString& group, const QString& key, const QVariant& defaultValue)
+	QVariant LoadVal(const QString& group, const QString& key, const QVariant& defaultValue = QVariant{})
 	{
 		QMutexLocker locker(&mutex_); // Lock the mutex_
 
