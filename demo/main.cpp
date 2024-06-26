@@ -7,28 +7,30 @@
 #include <QThreadPool>
 
 // Function to save settings in a separate thread
-void saveSettings(const QString& filePath)
+void saveSettings()
 {
-	CustomSettings customSettings(filePath);
+	CustomSettings &customSettings = CustomSettings::getInstance();
+
 	customSettings.SaveSettings();
 
 	qInfo() << Q_FUNC_INFO << QThread::currentThreadId();
 }
 // Function to load settings in a separate thread
-void loadSettings(const QString& filePath)
+void loadSettings()
 {
-	CustomSettings customSettings(filePath);
+	CustomSettings &customSettings = CustomSettings::getInstance();
 	customSettings.LoadSettings();
 
 	qInfo() << Q_FUNC_INFO << QThread::currentThreadId();
 }
 
-void printSettings(const QString& filePath)
+// for debugging purposes only
+void printSettings(const QString &filePath)
 {
 	EasyQSettings::getInstance(filePath).DisplaySettings();
 }
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 	QCoreApplication a(argc, argv);
 
@@ -38,18 +40,15 @@ int main(int argc, char* argv[])
 	QCoreApplication::setOrganizationName("ITIDA");
 	QCoreApplication::setApplicationName("MyApp");
 
-	QString filePath =
-		QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + ".ini";
-
-	QFuture<void> saveFuture = QtConcurrent::run(saveSettings, filePath);
+	QFuture<void> saveFuture = QtConcurrent::run(saveSettings);
 
 	saveFuture.waitForFinished();
 
-	QFuture<void> loadFuture = QtConcurrent::run(loadSettings, filePath);
+	QFuture<void> loadFuture = QtConcurrent::run(loadSettings);
 
 	loadFuture.waitForFinished();
 
-	printSettings(filePath);
+	printSettings(QCoreApplication::organizationName() + "/" + QCoreApplication::applicationName() + ".ini");
 
 	qInfo() << "Main thread finished ID: " << QThread::currentThreadId();
 	return a.exec();

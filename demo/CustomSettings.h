@@ -6,11 +6,17 @@
 class CustomSettings : public SettingsBase
 {
 private:
-	EasyQSettings& customSettings_;
-	const QString  filePath_;
+	EasyQSettings &customSettings_;
+	const QString filePath_;
+
+	// singleton
+	CustomSettings();
+
+	CustomSettings(const CustomSettings &) = delete;
+	CustomSettings &operator=(const CustomSettings &) = delete;
 
 public:
-	CustomSettings(const QString& filePath);
+	static CustomSettings &getInstance();
 
 	void SaveSettings() override;
 	void LoadSettings() override;
